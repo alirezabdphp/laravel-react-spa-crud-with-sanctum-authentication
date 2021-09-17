@@ -5,11 +5,11 @@ namespace App\Traits;
 
 trait ResponseControlTrait
 {
-    public function sendResponse($result, $message)
+    public function sendResponse($data, $message)
     {
         $response = [
             "status" => 200,
-            "data" => $result,
+            "data" => $data,
             "message" => $message,
         ];
         return response()->json($response, 200);

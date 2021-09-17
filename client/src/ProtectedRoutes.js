@@ -1,4 +1,5 @@
 import {useHistory} from "react-router-dom";
+import React, {useEffect} from "react";
 
 function ProtectedRoutes(props) {
     const history = useHistory();

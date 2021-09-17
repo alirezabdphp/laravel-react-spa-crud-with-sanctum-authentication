@@ -4,7 +4,8 @@ import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import Login from './pages/auth/Login';
 import Register from "./pages/auth/Register";
 import Index from "./pages/frontend/Index";
-import AddProduct from "./pages/admin/AddProduct";
+import AddProduct from "./pages/admin/product/AddProduct";
+import Products from "./pages/admin/product/Index";
 import Dashboard from "./pages/admin/Dashboard";
 import ProtectedRoutes from "./ProtectedRoutes";
 import axios from 'axios';
@@ -23,6 +24,7 @@ axios.defaults.withCredentials = true;
 //     return config;
 // });
 
+
 function App() {
   return (
     <div className="App">
@@ -32,13 +34,17 @@ function App() {
                 <Route path="/login"><Login></Login></Route>
                 <Route path="/register"><Register></Register></Route>
 
-                <Route path="/dashboard">
-                    <ProtectedRoutes Cmp={Dashboard}></ProtectedRoutes>
+                <ProtectedRoutes path="/dashboard" Cmp={Dashboard}></ProtectedRoutes>
+
+                <Route path="/products">
+                    <ProtectedRoutes Cmp={Products}></ProtectedRoutes>
                 </Route>
 
-                <Route path="/add-products">
+                <Route path="/product/create">
                     <ProtectedRoutes Cmp={AddProduct}></ProtectedRoutes>
                 </Route>
+
+
 
                 <Route path="/">
                     <Index></Index>

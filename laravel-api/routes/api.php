@@ -16,14 +16,20 @@ use App\Http\Controllers\Api\ProductController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-
 Route::post('store-user', [UserController::class, 'store']);
 Route::post('login-user', [UserController::class, 'login']);
 
-Route::post('product/store', [ProductController::class, 'store']);
-Route::get('products', [ProductController::class, 'index']);
-Route::post('products/delete/{product_uuid}', [ProductController::class, 'destroy']);
+
+Route::middleware('auth:sanctum')->group(function (){
+    Route::get('check-login', [UserController::class, 'checkLogin']);
+    Route::post('logout-user', [UserController::class, 'logOut']);
+});
+
+//Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//    return $request->user();
+//});
+
+
+//Route::post('product/store', [ProductController::class, 'store']);
+//Route::get('products', [ProductController::class, 'index']);
+//Route::post('products/delete/{product_uuid}', [ProductController::class, 'destroy']);

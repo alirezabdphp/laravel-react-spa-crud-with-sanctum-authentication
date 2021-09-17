@@ -29,7 +29,7 @@ function Header() {
                             localStorage.getItem('auth_token') ?
                             <>
                                 <Link to="/dashboard">Dashboard</Link>
-                                <Link to="/add-products">Add Product</Link>
+                                <Link to="/products">Products</Link>
                             </>
 
                             :
