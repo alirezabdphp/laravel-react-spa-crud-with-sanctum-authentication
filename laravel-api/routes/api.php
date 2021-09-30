@@ -20,16 +20,22 @@ Route::post('store-user', [UserController::class, 'store']);
 Route::post('login-user', [UserController::class, 'login']);
 
 
+Route::prefix('frontend')->group(function () {
+    Route::get('products', [ProductController::class, 'index']);
+});
+
 Route::middleware('auth:sanctum')->group(function (){
     Route::get('check-login', [UserController::class, 'checkLogin']);
     Route::post('logout-user', [UserController::class, 'logOut']);
+
+    Route::prefix('backend')->group(function () {
+        Route::middleware('auth:sanctum')->group(function (){
+            Route::post('product/store', [ProductController::class, 'store']);
+            Route::get('products', [ProductController::class, 'index']);
+            Route::post('products/delete/{product_uuid}', [ProductController::class, 'destroy']);
+        });
+    });
 });
 
-//Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//    return $request->user();
-//});
 
 
-//Route::post('product/store', [ProductController::class, 'store']);
-//Route::get('products', [ProductController::class, 'index']);
-//Route::post('products/delete/{product_uuid}', [ProductController::class, 'destroy']);

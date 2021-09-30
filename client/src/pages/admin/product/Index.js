@@ -33,7 +33,7 @@ function AddProduct() {
                 <div className="card mt-3 text-left">
                     <div className="card-header d-flex justify-content-between align-items-center">
                         Products
-                        <Link to="/product/create" type="button" class="btn btn-sm btn-primary"><i className="bi bi-plus"></i> New Product</Link>
+                        <Link to="/product/create" type="button" className="btn btn-sm btn-primary"><i className="bi bi-plus"></i> New Product</Link>
                     </div>
                     <div className="card-body">
                         <table className="table table-bordered table-hover text-center">

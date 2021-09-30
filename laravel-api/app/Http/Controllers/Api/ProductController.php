@@ -5,11 +5,12 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Models\Product;
 use App\Traits\ImageSaveTrait;
+use App\Traits\ResponseControlTrait;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    use ImageSaveTrait;
+    use ImageSaveTrait, ResponseControlTrait;
 
     /**
      * Display a listing of the resource.
@@ -18,7 +19,8 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return response(Product::orderBy('id', 'DESC')->get());
+        $data['products'] = Product::orderBy('id', 'DESC')->get();
+        return $this->sendResponse($data, 'Product List');
     }
 
     /**

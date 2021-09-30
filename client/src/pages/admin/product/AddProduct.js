@@ -1,28 +1,56 @@
 import Header from "../../layouts/Header";
-import {useHistory} from "react-router-dom";
-import {useState} from "react";
+import {Link, useHistory} from "react-router-dom";
+import React, {useState} from "react";
+import axios from "axios";
 
 function AddProduct() {
     const history = useHistory();
 
-    const [title, setTitle] = useState('');
-    const [price, setPrice] = useState('');
-    const [description, setDescription] = useState('');
+    const [newProduct, setNewProduct] = useState({
+        'title' : '',
+        'price' : '',
+        'description' : '',
+        'errors' : [],
+    });
     const [thumbnail, setThumbnail] = useState('');
 
-    async function storeProduct() {
+    // document.getElementById('productSaveBtn').disabled = true;
+    // document.getElementById('productSaveBtn').innerText = 'Loading...';
+
+    const handleInput = (e) => {
+        e.persist();
+        setNewProduct({...newProduct, [e.target.name]: e.target.value})
+    };
+
+    const  storeProduct = (e) =>{
+        e.preventDefault();
+
         const formData = new FormData();
-        formData.append('title', title)
-        formData.append('price', price)
-        formData.append('description', description)
-        formData.append('thumbnail', thumbnail)
+        formData.append('title', newProduct.title);
+        formData.append('price', newProduct.price);
+        formData.append('description', newProduct.description);
+        formData.append('thumbnail', thumbnail);
 
-        let result = await fetch("http://127.0.0.1:8000/api/product/store", {
-            method: 'POST',
-            body:formData
-        })
+        document.getElementById('productSaveBtn').disabled = true;
+        document.getElementById('productSaveBtn').innerText = 'Loading...';
 
-        history.push('/all-products')
+        axios.post('api/product/store', formData).then((response) => {
+            localStorage.setItem('user_name', JSON.stringify(response.data.data.user_name))
+            localStorage.setItem('auth_token', JSON.stringify(response.data.data.token))
+
+            document.getElementById('saveBtn').disabled = false;
+            document.getElementById('saveBtn').innerText = 'Save User';
+
+            history.push('/dashboard')
+        }).catch((error) =>{
+            if (error.response){
+                newProduct({...newProduct, errors: error.response.data.errors});
+            }
+
+            document.getElementById('saveBtn').disabled = false;
+            document.getElementById('saveBtn').innerText = 'Save User';
+        });
+
     }
 
     return(
@@ -30,37 +58,52 @@ function AddProduct() {
             <Header></Header>
 
             <div className="container">
-                <div className="row mt-5 justify-content-center">
-                    <div className="col-md-5">
-                        <div className="card">
-                            <div className="card-body">
-                                <h5 className="card-title">Add Product</h5>
+                <div className="card mt-3 text-left">
+                    <div className="card-header d-flex justify-content-between align-items-center">
+                        New Product
+                        <Link to="/products" type="button" className="btn btn-sm btn-primary"> Products</Link>
+                    </div>
+                    <div className="card-body">
+                        <div className="row justify-content-center">
+                            <div className="col-md-5">
+                                <div className="card">
+                                    <div className="card-body">
 
-                                <div className="form-group">
-                                    <label htmlFor="title">Title</label>
-                                    <input type="text" value={title} onInput={(e)=>setTitle(e.target.value)} className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Product Name" />
+
+                                        {/*<button type="submit" onClick={storeProduct} id="saveBtn" className="btn btn-primary mt-2">Save</button>*/}
+
+
+                                        <form onSubmit={storeProduct}>
+                                            <div className="form-group">
+                                                <label htmlFor="title">Title</label>
+                                                <input type="text" name="title" onChange={handleInput} value={newProduct.title} className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Product Name" />
+                                            </div>
+
+                                            <div className="form-group mt-2">
+                                                <label htmlFor="price">Price</label>
+                                                <input type="number" name="price" onChange={handleInput} value={newProduct.price} className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Product Price" />
+                                            </div>
+
+                                            <div className="form-group mt-2">
+                                                <label htmlFor="description">Description</label>
+                                                <textarea name="description" onChange={handleInput} value={newProduct.description} className="form-control"></textarea>
+                                            </div>
+
+                                            <div className="form-group mt-2">
+                                                <label htmlFor="price">Thumbnail</label>
+                                                <input type="file" onChange={(e)=>setThumbnail(e.target.files[0])} className="form-control" accept="image/*" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Product Price" />
+                                            </div>
+
+                                            <button  className="btn btn-primary mt-2" id="productSaveBtn">Submit</button>
+                                        </form>
+                                    </div>
                                 </div>
-
-                                <div className="form-group mt-2">
-                                    <label htmlFor="price">Price</label>
-                                    <input type="number" value={price} onInput={(e)=>setPrice(e.target.value)} className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Product Price" />
-                                </div>
-
-                                <div className="form-group mt-2">
-                                    <label htmlFor="description">Description</label>
-                                    <textarea value={description} onInput={(e)=>setDescription(e.target.value)} className="form-control"></textarea>
-                                </div>
-
-                                <div className="form-group mt-2">
-                                    <label htmlFor="price">Thumbnail</label>
-                                    <input type="file" onChange={(e)=>setThumbnail(e.target.files[0])} className="form-control" accept="image/*" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Product Price" />
-                                </div>
-
-                                <button onClick={storeProduct} className="btn btn-primary mt-2">Save</button>
                             </div>
                         </div>
                     </div>
                 </div>
+
+
             </div>
 
         </div>

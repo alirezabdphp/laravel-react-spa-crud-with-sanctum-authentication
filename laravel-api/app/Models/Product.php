@@ -19,7 +19,11 @@ class Product extends Model
 
     public function getThumbnailPathAttribute()
     {
-        return url('/') .'/'. $this->thumbnail;
+        if ($this->thumbnail){
+            return url('/') .'/'. $this->thumbnail;
+        }else{
+            return url('/') .'/blank-thumbnail.jpg';
+        }
     }
 
     protected static function boot()
