@@ -3,7 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Auth\UserController;
-use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\Backend\ProductController;
+use App\Http\Controllers\Api\Frontend\PageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,7 +22,7 @@ Route::post('login-user', [UserController::class, 'login']);
 
 
 Route::prefix('frontend')->group(function () {
-    Route::get('products', [ProductController::class, 'index']);
+    Route::get('products', [PageController::class, 'index']);
 });
 
 Route::middleware('auth:sanctum')->group(function (){
@@ -29,8 +30,9 @@ Route::middleware('auth:sanctum')->group(function (){
     Route::post('logout-user', [UserController::class, 'logOut']);
 
     Route::prefix('backend')->group(function () {
-        Route::middleware('auth:sanctum')->group(function (){
-            Route::post('product/store', [ProductController::class, 'store']);
+        Route::post('product/store', [ProductController::class, 'store']);
+
+        Route::middleware('backend.user.scope')->group(function () {
             Route::get('products', [ProductController::class, 'index']);
             Route::post('products/delete/{product_uuid}', [ProductController::class, 'destroy']);
         });

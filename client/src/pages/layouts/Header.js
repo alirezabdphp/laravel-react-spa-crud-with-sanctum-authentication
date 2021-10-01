@@ -24,7 +24,7 @@ function Header() {
                 <Container>
                     <Navbar.Brand>Navbar</Navbar.Brand>
                     <Nav className="me-auto navbar-link">
-                        <Link to="/index">Home</Link>
+                        <Link to="/">Home</Link>
                         {
                             localStorage.getItem('auth_token') ?
                             <>

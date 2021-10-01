@@ -42,10 +42,7 @@ function Register() {
         axios.get('sanctum/csrf-cookie').then(response => {
             axios.post('api/store-user', data).then((response) => {
                 localStorage.setItem('user_name', JSON.stringify(response.data.data.user_name))
-                localStorage.setItem('auth_token', JSON.stringify(response.data.data.token))
-
-                document.getElementById('saveBtn').disabled = false;
-                document.getElementById('saveBtn').innerText = 'Save User';
+                localStorage.setItem('auth_token', response.data.data.token)
 
                 history.push('/dashboard')
             }).catch((error) =>{
@@ -57,7 +54,6 @@ function Register() {
                 document.getElementById('saveBtn').innerText = 'Save User';
             });
         });
-
     }
 
 

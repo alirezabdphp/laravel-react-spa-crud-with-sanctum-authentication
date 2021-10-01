@@ -34,21 +34,18 @@ function AddProduct() {
         document.getElementById('productSaveBtn').disabled = true;
         document.getElementById('productSaveBtn').innerText = 'Loading...';
 
-        axios.post('api/product/store', formData).then((response) => {
-            localStorage.setItem('user_name', JSON.stringify(response.data.data.user_name))
-            localStorage.setItem('auth_token', JSON.stringify(response.data.data.token))
+        axios.post('api/backend/product/store', formData).then((response) => {
+            document.getElementById('productSaveBtn').disabled = false;
+            document.getElementById('productSaveBtn').innerText = 'Save User';
 
-            document.getElementById('saveBtn').disabled = false;
-            document.getElementById('saveBtn').innerText = 'Save User';
-
-            history.push('/dashboard')
+            history.push('/products')
         }).catch((error) =>{
             if (error.response){
-                newProduct({...newProduct, errors: error.response.data.errors});
+                setNewProduct({...newProduct, errors: error.response.data.errors});
             }
 
-            document.getElementById('saveBtn').disabled = false;
-            document.getElementById('saveBtn').innerText = 'Save User';
+            document.getElementById('productSaveBtn').disabled = false;
+            document.getElementById('productSaveBtn').innerText = 'Save User';
         });
 
     }

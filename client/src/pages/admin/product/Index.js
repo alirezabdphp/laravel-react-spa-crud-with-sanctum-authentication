@@ -1,29 +1,23 @@
 import Header from "../../layouts/Header";
 import {Link, useHistory} from "react-router-dom";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
+import axios from "axios";
 
 function AddProduct() {
     const history = useHistory();
 
-    const [title, setTitle] = useState('');
-    const [price, setPrice] = useState('');
-    const [description, setDescription] = useState('');
-    const [thumbnail, setThumbnail] = useState('');
+    const  [loading, setLoading] = useState(true);
+    const [productList, setProductList] = useState([]);
 
-    async function storeProduct() {
-        const formData = new FormData();
-        formData.append('title', title)
-        formData.append('price', price)
-        formData.append('description', description)
-        formData.append('thumbnail', thumbnail)
 
-        let result = await fetch("http://127.0.0.1:8000/api/product/store", {
-            method: 'POST',
-            body:formData
-        })
-
-        history.push('/all-products')
-    }
+    useEffect(()=>{
+        axios.get('api/backend/products').then((response) => {
+            setProductList(response.data.data.products);
+            setLoading(false);
+        }).catch((error) =>{
+            //
+        });
+    }, []);
 
     return(
         <div>

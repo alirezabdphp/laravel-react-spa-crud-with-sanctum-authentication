@@ -26,6 +26,7 @@ class Product extends Model
     {
         parent::boot();
         self::creating(function($model){
+            $model->user_id =  Auth::id();
             $model->uuid =  Str::uuid();
             $model->slug =  Str::slug($model->title);
         });

@@ -15,14 +15,22 @@ class CreateProductsTable extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id');
             $table->string('uuid');
             $table->string('title');
             $table->string('slug');
             $table->double('price');
-            $table->string('description')->nullable();
+            $table->longText('description')->nullable();
             $table->string('thumbnail')->nullable();
             $table->timestamps();
             $table->softDeletes();
+        });
+
+        Schema::table('products', function (Blueprint $table) {
+            $table->foreign('user_id')->references('id')
+                ->on('users')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
         });
     }
 

@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Models\Product;
 use App\Traits\ImageSaveTrait;
 use App\Traits\ResponseControlTrait;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -48,9 +49,10 @@ class ProductController extends Controller
         $this->saveImages($request, $product); //Save Thumbnail
 
         if ($product->save()){
-            return response($product);
+            $data['product'] = $product;
+            return $this->sendResponse($data, 'Product Successfully Created');
         }else{
-            return 'error';
+            return $this->sendError('Something is wrong. Try Again', 'Something is wrong. Try Again', 500);
         }
     }
 

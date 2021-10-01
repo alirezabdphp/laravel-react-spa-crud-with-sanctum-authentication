@@ -6,6 +6,7 @@ function Index() {
     const  [loading, setLoading] = useState(true);
     const [productList, setProductList] = useState([]);
 
+
     useEffect(()=>{
         axios.get('api/frontend/products').then((response) => {
             setProductList(response.data.data.products);
@@ -14,6 +15,13 @@ function Index() {
             //
         });
     }, []);
+
+
+    const getDesctription = (description) => {
+        var subStr = JSON.stringify(description).substr(1, 30);
+        var newStr = subStr.replace('"', " ");
+        return newStr;
+    };
 
     return(
         <div>
@@ -25,11 +33,13 @@ function Index() {
                             <div className="col-md-3 mb-3" key={product.id}>
                                 <div className="card">
                                     <div className="product-image">
-                                        <img className="card-img-top"  src={product.thumbnail_path}></img>
+                                        <img className="card-img-top img-fluid"  src={product.thumbnail_path}></img>
                                     </div>
                                     <div className="card-body product-card-body">
                                         <h5 className="card-title">{product.title}</h5>
-                                        <p className="card-text">{product.description ?? '--'}</p>
+                                        <p className="card-text">
+                                            {getDesctription(product.description)}
+                                        </p>
                                         <a href="/" className="btn btn-primary">
                                             <b>${product.price}</b> / Go somewhere
                                         </a>
