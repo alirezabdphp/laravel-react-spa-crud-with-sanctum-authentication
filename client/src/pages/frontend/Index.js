@@ -40,7 +40,7 @@ function Index() {
                                         <p className="card-text">
                                             {getDesctription(product.description)}
                                         </p>
-                                        <a href="/" className="btn btn-primary">
+                                        <a href="javascript:void(0)" className="btn btn-primary">
                                             <b>${product.price}</b> / Go somewhere
                                         </a>
                                     </div>

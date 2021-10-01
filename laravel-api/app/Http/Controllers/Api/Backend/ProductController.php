@@ -96,9 +96,18 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($uuid)
     {
-        //
+        $product = Product::whereUuid($uuid)->first();
+        if ($product){
+            $product->delete();
+
+            $data = '';
+            return $this->sendResponse($data, 'Product Successfully Deleted');
+        }else{
+            return $this->sendError('Product Not Found', '404');
+        }
+
     }
 
     private function saveImages($request, $model)

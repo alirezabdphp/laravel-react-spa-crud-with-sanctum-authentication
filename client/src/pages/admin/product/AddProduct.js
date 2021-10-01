@@ -14,9 +14,6 @@ function AddProduct() {
     });
     const [thumbnail, setThumbnail] = useState('');
 
-    // document.getElementById('productSaveBtn').disabled = true;
-    // document.getElementById('productSaveBtn').innerText = 'Loading...';
-
     const handleInput = (e) => {
         e.persist();
         setNewProduct({...newProduct, [e.target.name]: e.target.value})
@@ -35,9 +32,6 @@ function AddProduct() {
         document.getElementById('productSaveBtn').innerText = 'Loading...';
 
         axios.post('api/backend/product/store', formData).then((response) => {
-            document.getElementById('productSaveBtn').disabled = false;
-            document.getElementById('productSaveBtn').innerText = 'Save User';
-
             history.push('/products')
         }).catch((error) =>{
             if (error.response){
@@ -47,7 +41,6 @@ function AddProduct() {
             document.getElementById('productSaveBtn').disabled = false;
             document.getElementById('productSaveBtn').innerText = 'Save User';
         });
-
     }
 
     return(
@@ -65,11 +58,6 @@ function AddProduct() {
                             <div className="col-md-5">
                                 <div className="card">
                                     <div className="card-body">
-
-
-                                        {/*<button type="submit" onClick={storeProduct} id="saveBtn" className="btn btn-primary mt-2">Save</button>*/}
-
-
                                         <form onSubmit={storeProduct}>
                                             <div className="form-group">
                                                 <label htmlFor="title">Title</label>

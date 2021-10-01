@@ -1,9 +1,13 @@
 import Header from "../../layouts/Header";
 import {Link, useHistory} from "react-router-dom";
 import React, {useEffect, useState} from "react";
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+
+
 import axios from "axios";
 
-function AddProduct() {
+function Products() {
     const history = useHistory();
 
     const  [loading, setLoading] = useState(true);
@@ -19,6 +23,36 @@ function AddProduct() {
         });
     }, []);
 
+
+    const deleteCategory = (e, uuid) => {
+        e.preventDefault();
+        const thisClicked = e.currentTarget;
+
+
+        const deleteAlert = withReactContent(Swal)
+
+        deleteAlert.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to delete this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.delete('api/backend/product/delete/'+uuid).then((response) => {
+                    console.log(response.data.message);
+                    thisClicked.closest("tr").remove();
+                }).catch((error) =>{
+                    console.log(error);
+                });
+            }
+        })
+
+        console.log(uuid);
+    }
+
     return(
         <div>
             <Header></Header>
@@ -33,23 +67,33 @@ function AddProduct() {
                         <table className="table table-bordered table-hover text-center">
                             <thead>
                                 <tr className="bg-secondary text-white">
-                                    <th scope="col" width="3%">#</th>
-                                    <th scope="col">Thumbnail</th>
+                                    <th scope="col" width="10%">Thumbnail</th>
                                     <th scope="col">Title</th>
                                     <th scope="col">Price</th>
                                     <th scope="col">Description</th>
-                                    <th scope="col">Action</th>
+                                    <th scope="col" width="12%">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>Mark</td>
-                                    <td>Otto</td>
-                                    <td>@mdo</td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
+
+                                {
+                                    productList.map((product) =>
+                                        <tr key={product.id}>
+                                            <td>
+                                                <img className="img-fluid"  src={product.thumbnail_path}></img>
+                                            </td>
+                                            <td>{product.title}</td>
+                                            <td>{product.price}</td>
+                                            <td>{product.description}</td>
+                                            <td>
+                                                <div className="btn-group btn-group-sm" role="group" aria-label="Basic example">
+                                                    <Link to={`product/edit/${product.uuid}`}  className="btn btn-primary">Edit</Link>
+                                                    <button type="button" onClick={(e)=> deleteCategory(e, product.uuid)} className="btn btn-danger">Delete</button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    )
+                                }
                             </tbody>
                         </table>
                     </div>
@@ -59,4 +103,4 @@ function AddProduct() {
     )
 }
 
-export default AddProduct;
+export default Products;

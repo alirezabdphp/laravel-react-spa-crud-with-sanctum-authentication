@@ -6,6 +6,7 @@ import Register from "./pages/auth/Register";
 import Index from "./pages/frontend/Index";
 import AddProduct from "./pages/admin/product/AddProduct";
 import Products from "./pages/admin/product/Index";
+import EditProduct from "./pages/admin/product/EditProduct";
 import Dashboard from "./pages/admin/Dashboard";
 import ProtectedRoutes from "./ProtectedRoutes";
 import axios from 'axios';
@@ -43,6 +44,10 @@ function App() {
 
                 <Route path="/product/create">
                     <ProtectedRoutes Cmp={AddProduct}></ProtectedRoutes>
+                </Route>
+
+                <Route exact path="/product/edit/:id">
+                    <ProtectedRoutes Cmp={EditProduct}></ProtectedRoutes>
                 </Route>
 
 

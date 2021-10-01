@@ -32,9 +32,12 @@ Route::middleware('auth:sanctum')->group(function (){
     Route::prefix('backend')->group(function () {
         Route::post('product/store', [ProductController::class, 'store']);
 
+        /**
+         * User Access Only Own Created Items
+         */
         Route::middleware('backend.user.scope')->group(function () {
             Route::get('products', [ProductController::class, 'index']);
-            Route::post('products/delete/{product_uuid}', [ProductController::class, 'destroy']);
+            Route::delete('product/delete/{product_uuid}', [ProductController::class, 'destroy']);
         });
     });
 });
